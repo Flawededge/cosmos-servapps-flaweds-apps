@@ -5,7 +5,7 @@ const configFile = require('./config.json');
 const servappsPath = './servapps';
 const sourceRoot = configFile.url.replace(/\/[^/]*$/, '');
 const localRoot = 'http://localhost:3000';
-const catalogVersion = 'homebridge-20260601-0219-no-healthcheck';
+const catalogVersion = 'homebridge-20260601-0310-caddy-command-adminonly';
 
 function listFilesIfPresent(dir) {
   if (!fs.existsSync(dir)) {

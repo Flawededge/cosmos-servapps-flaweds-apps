@@ -3,7 +3,7 @@
     "form": [
       {
         "type": "warning",
-        "label": "Flawededge Homebridge compose version: homebridge-20260601-0219-no-healthcheck"
+        "label": "Flawededge Homebridge compose version: homebridge-20260601-0310-caddy-command-adminonly"
       },
       {
         "name": "imageTag",
@@ -58,7 +58,7 @@
         "cosmos-force-network-secured": "false",
         "cosmos-auto-update": "true",
         "cosmos-icon": "https://flawededge.github.io/cosmos-servapps-flaweds-apps/servapps/Homebridge/icon.png",
-        "flawededge-compose-version": "homebridge-20260601-0219-no-healthcheck",
+        "flawededge-compose-version": "homebridge-20260601-0310-caddy-command-adminonly",
         "cosmos-stack": "{ServiceName}",
         "cosmos-stack-main": "{ServiceName}"
       },
@@ -71,14 +71,13 @@
       ]
     },
     "{ServiceName}-proxy": {
-      "image": "nginx:alpine",
+      "image": "caddy:2-alpine",
       "container_name": "{ServiceName}-proxy",
       "restart": "unless-stopped",
       "depends_on": {
         "{ServiceName}": {}
       },
-      "entrypoint": ["/bin/sh", "-c"],
-      "command": "printf '%s\\n' 'server {' '  listen 80;' '  location / {' '    proxy_pass http://host.docker.internal:8581;' '    proxy_http_version 1.1;' '    proxy_set_header Host $host;' '    proxy_set_header Upgrade $http_upgrade;' '    proxy_set_header Connection \"upgrade\";' '  }' '}' > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'",
+      "command": "caddy reverse-proxy --from :80 --to host.docker.internal:8581",
       "extra_hosts": [
         "host.docker.internal:host-gateway"
       ],
@@ -86,7 +85,7 @@
         "cosmos-force-network-secured": "true",
         "cosmos-auto-update": "true",
         "cosmos-icon": "https://flawededge.github.io/cosmos-servapps-flaweds-apps/servapps/Homebridge/icon.png",
-        "flawededge-compose-version": "homebridge-20260601-0219-no-healthcheck",
+        "flawededge-compose-version": "homebridge-20260601-0310-caddy-command-adminonly",
         "cosmos-stack": "{ServiceName}",
         "cosmos-stack-main": "{ServiceName}"
       },
@@ -108,7 +107,7 @@
           },
           "AuthEnabled": true
           {if Context.adminOnly}
-          , "AuthAdmin": true
+          , "AdminOnly": true
           {/if}
         }
       ]
