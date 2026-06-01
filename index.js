@@ -5,6 +5,7 @@ const configFile = require('./config.json');
 const servappsPath = './servapps';
 const sourceRoot = configFile.url.replace(/\/[^/]*$/, '');
 const localRoot = 'http://localhost:3000';
+const catalogVersion = 'homebridge-20260601-0219-no-healthcheck';
 
 function listFilesIfPresent(dir) {
   if (!fs.existsSync(dir)) {
@@ -43,7 +44,7 @@ for (const file of servapps) {
   }
 
   if (fs.existsSync(path.join(appPath, 'cosmos-compose.json'))) {
-    servapp.compose = `${sourceRoot}/servapps/${file}/cosmos-compose.json`;
+    servapp.compose = `${sourceRoot}/servapps/${file}/cosmos-compose.json?v=${catalogVersion}`;
   }
 
   servappsJSON.push(servapp);

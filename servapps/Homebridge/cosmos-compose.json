@@ -2,6 +2,10 @@
   "cosmos-installer": {
     "form": [
       {
+        "type": "warning",
+        "label": "Flawededge Homebridge compose version: homebridge-20260601-0219-no-healthcheck"
+      },
+      {
         "name": "imageTag",
         "label": "Which Homebridge image tag do you want to use?",
         "initialValue": "latest",
@@ -54,6 +58,7 @@
         "cosmos-force-network-secured": "false",
         "cosmos-auto-update": "true",
         "cosmos-icon": "https://flawededge.github.io/cosmos-servapps-flaweds-apps/servapps/Homebridge/icon.png",
+        "flawededge-compose-version": "homebridge-20260601-0219-no-healthcheck",
         "cosmos-stack": "{ServiceName}",
         "cosmos-stack-main": "{ServiceName}"
       },
@@ -81,6 +86,7 @@
         "cosmos-force-network-secured": "true",
         "cosmos-auto-update": "true",
         "cosmos-icon": "https://flawededge.github.io/cosmos-servapps-flaweds-apps/servapps/Homebridge/icon.png",
+        "flawededge-compose-version": "homebridge-20260601-0219-no-healthcheck",
         "cosmos-stack": "{ServiceName}",
         "cosmos-stack-main": "{ServiceName}"
       },
