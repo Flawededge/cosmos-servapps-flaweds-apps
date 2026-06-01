@@ -63,14 +63,7 @@
           "target": "/homebridge",
           "type": "bind"
         }
-      ],
-      "healthcheck": {
-        "test": ["CMD-SHELL", "curl --fail http://localhost:8581 || exit 1"],
-        "interval": "60s",
-        "retries": 5,
-        "start_period": "300s",
-        "timeout": "2s"
-      }
+      ]
     },
     "{ServiceName}-proxy": {
       "image": "nginx:alpine",
