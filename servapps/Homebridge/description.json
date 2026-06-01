@@ -1,0 +1,9 @@
+{
+  "name": "Homebridge",
+  "description": "Bridge non-HomeKit smart devices into Apple Home for iPhone, iPad, Apple Watch, and HomePod.",
+  "longDescription": "<p>Homebridge emulates the iOS HomeKit API so unsupported smart home devices can appear in Apple Home.</p><p>This ServApp uses the official Homebridge Docker image, persists Homebridge configuration and plugins under /homebridge, and runs the Homebridge container in host networking mode for HomeKit discovery.</p>",
+  "tags": ["homekit", "apple-home", "smart-home", "iphone", "iot", "automation", "homebridge"],
+  "repository": "https://github.com/homebridge/homebridge",
+  "image": "https://hub.docker.com/r/homebridge/homebridge",
+  "supported_architectures": ["amd64", "arm64", "arm"]
+}

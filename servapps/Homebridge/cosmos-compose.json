@@ -1,0 +1,121 @@
+{
+  "cosmos-installer": {
+    "form": [
+      {
+        "name": "imageTag",
+        "label": "Which Homebridge image tag do you want to use?",
+        "initialValue": "latest",
+        "type": "select",
+        "options": [
+          ["latest", "Latest stable"],
+          ["synology", "Synology compatible"],
+          ["legacy", "Legacy Homebridge 1.x"],
+          ["beta", "Beta"],
+          ["alpha", "Alpha"]
+        ]
+      },
+      {
+        "name": "storagePath",
+        "label": "Where do you want to store Homebridge config and plugins?",
+        "initialValue": "{DefaultDataPath}/homebridge",
+        "type": "text"
+      },
+      {
+        "name": "adminOnly",
+        "label": "Do you want to make the Homebridge UI admin only in Cosmos?",
+        "initialValue": true,
+        "type": "checkbox"
+      }
+    ],
+    "post-install": [
+      {
+        "type": "info",
+        "label": "Homebridge runs on the host network for Apple Home discovery. Pair devices from the Homebridge UI QR code after installing the plugins you need."
+      },
+      {
+        "type": "warning",
+        "label": "Homebridge listens on host port 8581. Stop any existing service using that port before installing this app."
+      }
+    ]
+  },
+  "minVersion": "0.9.0",
+  "services": {
+    "{ServiceName}": {
+      "image": "homebridge/homebridge:{Context.imageTag}",
+      "container_name": "{ServiceName}",
+      "hostname": "{ServiceName}",
+      "restart": "unless-stopped",
+      "network_mode": "host",
+      "environment": [
+        "TZ=auto",
+        "ENABLE_AVAHI=1"
+      ],
+      "labels": {
+        "cosmos-force-network-secured": "false",
+        "cosmos-auto-update": "true",
+        "cosmos-icon": "https://flawededge.github.io/cosmos-servapps-flaweds-apps/servapps/Homebridge/icon.png",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "volumes": [
+        {
+          "source": "{Context.storagePath}",
+          "target": "/homebridge",
+          "type": "bind"
+        }
+      ],
+      "healthcheck": {
+        "test": ["CMD-SHELL", "curl --fail http://localhost:8581 || exit 1"],
+        "interval": "60s",
+        "retries": 5,
+        "start_period": "300s",
+        "timeout": "2s"
+      }
+    },
+    "{ServiceName}-proxy": {
+      "image": "nginx:alpine",
+      "container_name": "{ServiceName}-proxy",
+      "restart": "unless-stopped",
+      "depends_on": {
+        "{ServiceName}": {}
+      },
+      "entrypoint": ["/bin/sh", "-c"],
+      "command": "printf '%s\\n' 'server {' '  listen 80;' '  location / {' '    proxy_pass http://host.docker.internal:8581;' '    proxy_http_version 1.1;' '    proxy_set_header Host $host;' '    proxy_set_header Upgrade $http_upgrade;' '    proxy_set_header Connection \"upgrade\";' '  }' '}' > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'",
+      "extra_hosts": [
+        "host.docker.internal:host-gateway"
+      ],
+      "labels": {
+        "cosmos-force-network-secured": "true",
+        "cosmos-auto-update": "true",
+        "cosmos-icon": "https://flawededge.github.io/cosmos-servapps-flaweds-apps/servapps/Homebridge/icon.png",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "networks": {
+        "{ServiceName}-network": {}
+      },
+      "routes": [
+        {
+          "name": "{ServiceName}",
+          "description": "Expose the Homebridge UI",
+          "useHost": true,
+          "target": "http://{ServiceName}-proxy:80",
+          "mode": "SERVAPP",
+          "Timeout": 14400000,
+          "ThrottlePerMinute": 12000,
+          "BlockCommonBots": true,
+          "SmartShield": {
+            "Enabled": true
+          },
+          "AuthEnabled": true
+          {if Context.adminOnly}
+          , "AuthAdmin": true
+          {/if}
+        }
+      ]
+    }
+  },
+  "networks": {
+    "{ServiceName}-network": {}
+  }
+}

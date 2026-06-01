@@ -1,9 +1,0 @@
-{
-  "name": "OrcaSlicer ARM",
-  "description": "OrcaSlicer for arm64 SBCs, accessible through a browser.",
-  "longDescription": "<p>OrcaSlicer ARM runs OrcaSlicer in a browser-accessible KasmVNC container for Raspberry Pi and other arm64 single-board computers.</p><p>The installer includes two memory modes: RAM-only for hosts with enough memory, and an opt-in swapfile mode that creates a 4 GB host swapfile for smaller devices.</p>",
-  "tags": ["3d-printing", "slicer", "orcaslicer", "arm64", "kasmvnc", "raspberry-pi"],
-  "repository": "https://github.com/Matszwe02/OrcaSlicer_arm",
-  "image": "https://hub.docker.com/r/matszwe02/orcaslicer-arm",
-  "supported_architectures": ["arm64"]
-}

@@ -49,7 +49,7 @@ for (const file of servapps) {
   servappsJSON.push(servapp);
 }
 
-const showcaseNames = ['OrcaSlicer ARM'];
+const showcaseNames = ['Homebridge'];
 const showcases = servappsJSON.filter((app) => showcaseNames.includes(app.name));
 
 const apps = {
